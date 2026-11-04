@@ -7,10 +7,10 @@ import {
   Laptop,
   Store,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { cn } from "cn"
 import { OnboardingShell } from "@/components/onboarding-shell"
-import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const roles = [
@@ -22,7 +22,13 @@ const roles = [
 ]
 
 export default function OnboardingPage() {
+  const router = useRouter()
   const [selectedRole, setSelectedRole] = useState("")
+
+  function handleRoleChange(role: string) {
+    setSelectedRole(role)
+    if (role) router.push(`/onboarding/${role}/step-1`)
+  }
 
   return (
     <OnboardingShell>
@@ -35,7 +41,7 @@ export default function OnboardingPage() {
           type="single"
           variant="outline"
           value={selectedRole}
-          onValueChange={setSelectedRole}
+          onValueChange={handleRoleChange}
           className="grid w-full grid-cols-6 gap-3"
         >
           {roles.map(({ slug, label, icon: Icon }, index) => (
@@ -54,15 +60,6 @@ export default function OnboardingPage() {
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <div className="mt-6 flex justify-center">
-          {selectedRole ? (
-            <Button asChild size="lg" className="min-w-32">
-            <a href={`/onboarding/${selectedRole}`}>Continue</a>
-            </Button>
-          ) : (
-            <Button size="lg" className="min-w-32" disabled>Continue</Button>
-          )}
-        </div>
       </div>
     </OnboardingShell>
   )

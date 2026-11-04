@@ -13,8 +13,8 @@ import {
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-svh flex-col bg-muted/30">
-      <header className="border-b bg-background/90">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
+      <header className="h-16 border-b bg-background/90">
+        <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <a href="/sign-up" aria-label="Era home">
             <Image
               src="/logo.png"
@@ -48,8 +48,8 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      <footer className="border-t bg-background/90">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-1 px-4 py-1 text-sm text-muted-foreground sm:flex-row sm:px-6">
+      <footer className="h-16 border-t bg-background/90">
+        <div className="mx-auto flex h-full w-full max-w-7xl flex-col items-center justify-between gap-1 px-4 py-4 text-sm text-muted-foreground sm:flex-row sm:px-6">
           <p>© 2026 Era. All rights reserved.</p>
           <nav className="flex items-center gap-1" aria-label="Footer navigation">
             <Button asChild variant="ghost" size="sm">
