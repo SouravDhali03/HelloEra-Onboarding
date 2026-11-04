@@ -1,0 +1,23 @@
+import { CheckCircle2 } from "lucide-react"
+
+import { AuthShell } from "@/components/auth-shell"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+
+export default function PasswordChangedPage() {
+  return (
+    <AuthShell>
+      <Card className="w-full max-w-[22.5rem] text-center shadow-lg shadow-primary/5">
+        <CardHeader>
+          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary"><CheckCircle2 className="size-7" /></div>
+          <CardTitle className="text-2xl">Password changed successfully</CardTitle>
+          <CardDescription>Your password has been updated. You can now sign in with your new password.</CardDescription>
+        </CardHeader>
+        <CardContent />
+        <CardFooter className="border-t pt-6">
+          <Button asChild size="lg" variant="ghost" className="w-full"><a href="/sign-in">Back to sign in</a></Button>
+        </CardFooter>
+      </Card>
+    </AuthShell>
+  )
+}
