@@ -18,7 +18,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/sign-up" aria-label="Era home">
             <Image
-              src="/logo.png"
+              src={process.env.GITHUB_ACTIONS ? "/HelloEra-Onboarding/logo.png" : "/logo.png"}
               alt="Era"
               width={113}
               height={112}
