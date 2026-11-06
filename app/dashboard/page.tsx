@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-import { cookies } from "next/headers"
 import {
   BadgeCheck,
   Bookmark,
@@ -92,9 +91,8 @@ const roleMenus = {
 } as const
 
 export default async function DashboardPage() {
-  const cookieStore = await cookies()
-  const role = cookieStore.get("era-role")?.value ?? "student"
-  const roles = Array.from(new Set([role, ...(cookieStore.get("era-roles")?.value.split(",").filter(Boolean) ?? [])]))
+  const role = "student"
+  const roles = [role]
   const roleMenu = roleMenus[role as keyof typeof roleMenus] ?? roleMenus.student
 
   return (
