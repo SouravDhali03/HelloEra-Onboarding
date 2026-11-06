@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, LockKeyhole } from "lucide-react"
 
 import {
   InputGroup,
@@ -9,6 +9,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { FieldError } from "@/components/ui/field"
 
 export function PasswordField({
   autoComplete,
@@ -17,6 +18,7 @@ export function PasswordField({
   name = "password",
   placeholder = "Enter your password",
   onValueChange,
+  showError = false,
 }: {
   autoComplete: string
   showRemaining?: boolean
@@ -24,6 +26,7 @@ export function PasswordField({
   name?: string
   placeholder?: string
   onValueChange?: (value: string) => void
+  showError?: boolean
 }) {
   const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState("")
@@ -37,9 +40,13 @@ export function PasswordField({
   return (
     <div className="flex flex-col gap-2">
       <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <LockKeyhole aria-hidden="true" />
+        </InputGroupAddon>
         <InputGroupInput
           id={id}
           name={name}
+          value={password}
           type={showPassword ? "text" : "password"}
           placeholder={placeholder}
           autoComplete={autoComplete}
@@ -49,7 +56,9 @@ export function PasswordField({
         />
         <InputGroupAddon align="inline-end">
           <InputGroupButton
+            type="button"
             aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-pressed={showPassword}
             onClick={() => setShowPassword((visible) => !visible)}
             size="icon-sm"
           >
@@ -71,6 +80,7 @@ export function PasswordField({
             : `${remaining} character${remaining === 1 ? "" : "s"} remaining`}
         </p>
       )}
+      {showError && password.length < 8 ? <FieldError>Please enter at least 8 characters.</FieldError> : null}
     </div>
   )
 }

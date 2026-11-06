@@ -8,7 +8,6 @@ import {
   Store,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { cn } from "cn"
 import { OnboardingShell } from "@/components/onboarding-shell"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
@@ -23,11 +22,15 @@ const roles = [
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const [selectedRole, setSelectedRole] = useState("")
 
   function handleRoleChange(role: string) {
-    setSelectedRole(role)
-    if (role) router.push(`/onboarding/${role}/step-1`)
+    if (role) {
+      const storedRoles = document.cookie.split("; ").find((cookie) => cookie.startsWith("era-roles="))?.split("=")[1]?.split(",").filter(Boolean) ?? []
+      const roles = Array.from(new Set([...storedRoles, role]))
+      document.cookie = `era-roles=${roles.join(",")}; path=/; max-age=${60 * 60 * 24 * 30}`
+      document.cookie = `era-role=${role}; path=/; max-age=${60 * 60 * 24 * 30}`
+      router.push(`/onboarding/${role}/step-1`)
+    }
   }
 
   return (
@@ -40,7 +43,7 @@ export default function OnboardingPage() {
         <ToggleGroup
           type="single"
           variant="outline"
-          value={selectedRole}
+          value=""
           onValueChange={handleRoleChange}
           className="grid w-full grid-cols-6 gap-3"
         >

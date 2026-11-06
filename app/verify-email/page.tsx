@@ -1,7 +1,8 @@
 "use client"
 
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronLeft } from "lucide-react"
 
 import { AuthShell } from "@/components/auth-shell"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 
 function VerifyEmailForm() {
   const searchParams = useSearchParams()
@@ -22,7 +23,6 @@ function VerifyEmailForm() {
   const [digits, setDigits] = useState(() => Array.from({ length: 8 }, () => ""))
   const [secondsLeft, setSecondsLeft] = useState(30)
   const [message, setMessage] = useState("")
-  const inputRefs = useRef<Array<HTMLInputElement | null>>([])
   const email = searchParams.get("email")
   const code = digits.join("")
   const maskedEmail = maskEmail(email)
@@ -45,36 +45,10 @@ function VerifyEmailForm() {
     setMessage("A new verification code has been sent.")
   }
 
-  function handleDigitChange(index: number, value: string) {
-    const digit = value.replace(/\D/g, "").slice(-1)
-    setDigits((current) => current.map((item, itemIndex) => (itemIndex === index ? digit : item)))
-
-    if (digit && index < 7) {
-      inputRefs.current[index + 1]?.focus()
-    }
-  }
-
-  function handleDigitKeyDown(index: number, key: string) {
-    if (key === "Backspace" && !digits[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus()
-    }
-  }
-
-  function handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
-    event.preventDefault()
-    const pastedDigits = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, 8)
-    if (!pastedDigits) {
-      return
-    }
-
-    setDigits(Array.from({ length: 8 }, (_, index) => pastedDigits[index] ?? ""))
-    inputRefs.current[Math.min(pastedDigits.length, 8) - 1]?.focus()
-  }
-
   return (
-    <Card className="w-full max-w-[22.5rem] shadow-lg shadow-primary/5">
+    <Card className="w-full max-w-[22.5rem] shadow-none">
       <CardHeader className="!gap-0 text-center">
-        <CardTitle className="text-2xl">Verify your email</CardTitle>
+        <CardTitle className="text-xl">Verify your email</CardTitle>
         <CardDescription>
           Enter the 8-digit code we sent
             {email ? ` to ${maskedEmail}` : " to your email address"}.
@@ -83,70 +57,42 @@ function VerifyEmailForm() {
 
       <CardContent>
         <form
+          id="verify-email-form"
           className="flex flex-col gap-6"
-          onSubmit={(event) => {
-            event.preventDefault()
-            router.push("/onboarding")
-          }}
-        >
+        onSubmit={(event) => {
+          event.preventDefault()
+          router.push("/onboarding")
+        }}
+      >
           <Field>
             <FieldLabel htmlFor="verification-code">Verification code</FieldLabel>
-            <div
+            <InputOTP
               id="verification-code"
-              className="flex justify-center gap-1.5"
-              role="group"
+              maxLength={8}
+              value={code}
+              onChange={(value) => setDigits(Array.from({ length: 8 }, (_, index) => value[index] ?? ""))}
+              containerClassName="mx-auto justify-center gap-1.5"
               aria-label="8-digit verification code"
+              required
             >
-              {digits.map((digit, index) => (
-                <Input
-                  key={index}
-                  id={`otp-${index}`}
-                  ref={(element) => {
-                    inputRefs.current[index] = element
-                  }}
-                  aria-label={`Digit ${index + 1} of 8`}
-                  inputMode="numeric"
-                  maxLength={1}
-                  pattern="[0-9]"
-                  required
-                  value={digit}
-                  onChange={(event) => handleDigitChange(index, event.target.value)}
-                  onKeyDown={(event) => handleDigitKeyDown(index, event.key)}
-                  onPaste={handlePaste}
-                  className="size-9 rounded-none border-0 border-b-2 border-input bg-transparent p-0 text-center text-lg shadow-none ring-0 focus-visible:border-primary focus-visible:ring-0"
-                />
-              ))}
-            </div>
+              <InputOTPGroup className="gap-1.5 rounded-none">
+                  {digits.map((_, index) => <InputOTPSlot key={index} index={index} className="rounded-none border-0 border-b-2 bg-transparent text-lg shadow-none first:border-l-0 first:rounded-none last:border-r-0 last:rounded-none" />)}
+              </InputOTPGroup>
+            </InputOTP>
+            <FieldDescription aria-live="polite" className="flex items-center gap-1">
+              {message || (secondsLeft > 0 ? `You can resend a code in ${secondsLeft}s.` : "Didn't receive the code?")}
+              {!message && secondsLeft === 0 ? <Button type="button" variant="link" size="xs" className="h-auto p-0 text-sm font-normal text-foreground" onClick={handleResend}>Resend code</Button> : null}
+            </FieldDescription>
           </Field>
-
-          <Button type="submit" size="lg" className="w-full" disabled={code.length !== 8}>
-            Verify email
-          </Button>
-
-          <div className="flex flex-col items-center gap-2 text-center text-sm">
-            <span className="text-muted-foreground">Didn&apos;t receive the code?</span>
-            <Button
-              type="button"
-              variant="link"
-              size="sm"
-              onClick={handleResend}
-              disabled={secondsLeft > 0}
-            >
-              {secondsLeft > 0 ? `Resend code in ${secondsLeft}s` : "Resend code"}
-            </Button>
-            {message && (
-              <p aria-live="polite" className="text-xs text-primary">
-                {message}
-              </p>
-            )}
-          </div>
         </form>
       </CardContent>
-
-      <CardFooter className="justify-center border-t pt-6 text-sm text-muted-foreground">
-        <a href="/sign-up" className="font-medium text-foreground underline-offset-4 hover:underline">
-          Back to sign up
-        </a>
+      <CardFooter className="flex-col gap-2">
+        <Button form="verify-email-form" type="submit" size="lg" className="w-full" disabled={code.length !== 8}>
+          Verify email
+        </Button>
+        <Button asChild variant="link" size="sm" className="font-medium text-foreground">
+          <a href="/sign-up"><ChevronLeft data-icon="inline-start" aria-hidden="true" />Back to sign up</a>
+        </Button>
       </CardFooter>
     </Card>
   )

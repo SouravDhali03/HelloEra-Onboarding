@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
+import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
 import { MultiSelectField, StudentStepLayout } from "@/components/student-onboarding"
@@ -13,8 +14,8 @@ export default function StudentLanguagePage() {
   const router = useRouter()
   const { role } = useParams<{ role: string }>()
   const [selected, setSelected] = useState<string[]>([])
-  return <StudentStepLayout step={5} description="What is your preferred language?" actions={<><Button asChild variant="outline" size="icon" aria-label="Back"><a href={`/onboarding/${role}/step-4`}><ArrowLeft data-icon="inline-start" /></a></Button><Button type="submit" form="student-language" disabled={!selected.length}>Finish onboarding</Button></>}>
-    <form id="student-language" onSubmit={(event) => { event.preventDefault(); router.push(`/onboarding/${role}/complete`) }}>
+  return <StudentStepLayout step={5} description="What is your preferred language?" actions={<><Button asChild variant="outline" size="icon" aria-label="Back"><Link href={`/onboarding/${role}/step-4`}><ArrowLeft data-icon="inline-start" /></Link></Button><Button type="submit" form="student-language" disabled={!selected.length}>Go to Era</Button></>}>
+    <form id="student-language" onSubmit={(event) => { event.preventDefault(); router.push("/dashboard") }}>
       <MultiSelectField label="Languages" placeholder="Search or add a language" suggestions={suggestions} selected={selected} onChange={setSelected} />
     </form>
   </StudentStepLayout>

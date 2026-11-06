@@ -1,13 +1,14 @@
 "use client"
 
-import { Suspense, useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { ChevronLeft } from "lucide-react"
 
 import { AuthShell } from "@/components/auth-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 
 function maskEmail(email: string) {
   const [local, domain] = email.split("@")
@@ -22,7 +23,6 @@ function VerifyForgotPasswordPage() {
   const [digits, setDigits] = useState<string[]>(Array(8).fill(""))
   const [seconds, setSeconds] = useState(30)
   const [message, setMessage] = useState("")
-  const refs = useRef<Array<HTMLInputElement | null>>([])
   const code = digits.join("")
 
   useEffect(() => {
@@ -30,19 +30,6 @@ function VerifyForgotPasswordPage() {
     const timer = window.setInterval(() => setSeconds((value) => Math.max(0, value - 1)), 1000)
     return () => window.clearInterval(timer)
   }, [seconds])
-
-  function updateDigit(index: number, value: string) {
-    const next = value.replace(/\D/g, "").slice(-1)
-    setDigits((current) => current.map((digit, item) => item === index ? next : digit))
-    if (next && index < 7) refs.current[index + 1]?.focus()
-  }
-
-  function handlePaste(index: number, value: string) {
-    const pasted = value.replace(/\D/g, "").slice(0, 8)
-    if (!pasted) return
-    setDigits((current) => current.map((digit, item) => pasted[item] ?? (item < index ? digit : "")))
-    refs.current[Math.min(index + pasted.length, 7)]?.focus()
-  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -55,47 +42,43 @@ function VerifyForgotPasswordPage() {
     setDigits(Array(8).fill(""))
     setSeconds(30)
     setMessage("A new verification code has been sent.")
-    refs.current[0]?.focus()
   }
 
   return (
     <AuthShell>
-      <Card className="w-full max-w-[22.5rem] shadow-lg shadow-primary/5">
+      <Card className="w-full max-w-[22.5rem] shadow-none">
         <CardHeader className="!gap-0 text-center">
-          <CardTitle className="text-2xl">Verify your email</CardTitle>
+          <CardTitle className="text-xl">Verify your email</CardTitle>
           <CardDescription>Enter the 8-digit code sent to {maskEmail(email)}.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <form id="forgot-password-verify-form" className="flex flex-col gap-6" onSubmit={handleSubmit}>
             <Field>
-              <FieldLabel htmlFor="forgot-otp-0">Verification code</FieldLabel>
-              <div className="flex items-center justify-between gap-2" role="group" aria-label="8-digit verification code">
-                {digits.map((digit, index) => (
-                  <Input
-                    key={index}
-                    ref={(element) => { refs.current[index] = element }}
-                    id={`forgot-otp-${index}`}
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    aria-label={`Digit ${index + 1}`}
-                    className="size-9 rounded-none border-0 border-b-2 border-input bg-transparent p-0 text-center text-lg shadow-none ring-0 focus-visible:border-primary focus-visible:ring-0"
-                    onChange={(event) => updateDigit(index, event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Backspace" && !digit && index > 0) refs.current[index - 1]?.focus()
-                    }}
-                    onPaste={(event) => { event.preventDefault(); handlePaste(index, event.clipboardData.getData("text")) }}
-                  />
-                ))}
-              </div>
-              <FieldDescription aria-live="polite">{message || (seconds > 0 ? `You can resend a code in ${seconds}s.` : "Didn&apos;t receive the code?")}</FieldDescription>
+              <FieldLabel htmlFor="forgot-otp">Verification code</FieldLabel>
+              <InputOTP
+                id="forgot-otp"
+                maxLength={8}
+                value={code}
+                onChange={(value) => setDigits(Array.from({ length: 8 }, (_, index) => value[index] ?? ""))}
+                containerClassName="mx-auto justify-center gap-1.5"
+                aria-label="8-digit verification code"
+              >
+                <InputOTPGroup className="gap-1.5 rounded-none">
+                  {digits.map((_, index) => <InputOTPSlot key={index} index={index} className="rounded-none border-0 border-b-2 bg-transparent text-lg shadow-none first:border-l-0 first:rounded-none last:border-r-0 last:rounded-none" />)}
+                </InputOTPGroup>
+              </InputOTP>
+              <FieldDescription aria-live="polite" className="flex items-center gap-1">
+                {message || (seconds > 0 ? `You can resend a code in ${seconds}s.` : "Didn't receive the code?")}
+                {!message && seconds === 0 ? <Button type="button" variant="link" size="xs" className="h-auto p-0 text-sm font-normal text-foreground" onClick={resendCode}>Resend code</Button> : null}
+              </FieldDescription>
             </Field>
-            <Button type="submit" size="lg" className="w-full" disabled={code.length !== 8}>Verify code</Button>
-            <Button type="button" variant="ghost" className="w-full" disabled={seconds > 0} onClick={resendCode}>Resend code</Button>
           </form>
         </CardContent>
-        <CardFooter className="justify-center border-t pt-6 text-sm text-muted-foreground">
-          <a href="/sign-in" className="font-medium text-foreground underline-offset-4 hover:underline">Back to sign in</a>
+        <CardFooter className="flex-col gap-2">
+          <Button form="forgot-password-verify-form" type="submit" size="lg" className="w-full" disabled={code.length !== 8}>Verify code</Button>
+          <Button asChild variant="link" size="sm" className="font-medium text-foreground">
+            <a href="/sign-in"><ChevronLeft data-icon="inline-start" aria-hidden="true" />Back to sign in</a>
+          </Button>
         </CardFooter>
       </Card>
     </AuthShell>
