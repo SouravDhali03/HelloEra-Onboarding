@@ -41,7 +41,7 @@ export function OnboardingShell({
       <header className="h-16 border-b bg-background/90">
         <div className="relative mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <Link href="/sign-up" aria-label="Era home">
-            <Image src="/logo.png" alt="Era" width={113} height={112} className="size-10 rounded-xl object-cover" priority />
+            <Image src={process.env.GITHUB_ACTIONS ? "/HelloEra-Onboarding/logo.png" : "/logo.png"} alt="Era" width={113} height={112} className="size-10 rounded-xl object-cover" priority />
           </Link>
           {progress ? (
             <>

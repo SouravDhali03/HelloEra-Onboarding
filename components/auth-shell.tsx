@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ChevronDown, Languages, LifeBuoy, ShieldCheck } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -15,7 +16,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-svh flex-col bg-muted/30">
       <header className="h-16 border-b bg-background/90">
         <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-          <a href="/sign-up" aria-label="Era home">
+          <Link href="/sign-up" aria-label="Era home">
             <Image
               src="/logo.png"
               alt="Era"
@@ -24,7 +25,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
               className="size-10 rounded-xl object-cover"
               priority
             />
-          </a>
+          </Link>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm">

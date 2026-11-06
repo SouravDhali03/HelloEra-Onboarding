@@ -99,7 +99,7 @@ export default async function DashboardPage() {
     <div className="flex min-h-svh flex-col overflow-x-clip bg-muted/20">
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center border-b bg-background px-4 sm:px-6">
         <Link href="/dashboard" aria-label="Era dashboard">
-          <Image src="/logo.png" alt="Era" width={113} height={112} className="size-8 rounded-lg object-cover" priority />
+          <Image src={process.env.GITHUB_ACTIONS ? "/HelloEra-Onboarding/logo.png" : "/logo.png"} alt="Era" width={113} height={112} className="size-8 rounded-lg object-cover" priority />
         </Link>
         <div className="ml-auto flex items-center gap-1">
           <Button variant="ghost" size="icon-sm" aria-label="Open cart"><ShoppingCart data-icon="inline-start" /></Button>
