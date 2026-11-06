@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { ArrowLeft, Building2, Link as LinkIcon } from "lucide-react"
 
 import { SellerStepLayout } from "@/components/seller-onboarding"
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 
-export default function SellerStoreStep() {
+function SellerStoreStepContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const format = searchParams.get("format") ?? ""
@@ -28,4 +28,8 @@ export default function SellerStoreStep() {
       </FieldGroup>
     </form>
   </SellerStepLayout>
+}
+
+export default function SellerStoreStep() {
+  return <Suspense fallback={null}><SellerStoreStepContent /></Suspense>
 }

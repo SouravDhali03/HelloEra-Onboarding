@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useRef, useState } from "react"
+import { Suspense, useRef, useState } from "react"
 import { ArrowLeft, FileImage, Upload, X } from "lucide-react"
 
 import { SellerStepLayout } from "@/components/seller-onboarding"
@@ -11,7 +11,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Attachment, AttachmentAction, AttachmentActions, AttachmentContent, AttachmentDescription, AttachmentMedia, AttachmentTitle } from "@/components/ui/attachment"
 import { Textarea } from "@/components/ui/textarea"
 
-export default function SellerProfileStep() {
+function SellerProfileStepContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const format = searchParams.get("format") ?? ""
@@ -44,4 +44,8 @@ export default function SellerProfileStep() {
       </div>
     </form>
   </SellerStepLayout>
+}
+
+export default function SellerProfileStep() {
+  return <Suspense fallback={null}><SellerProfileStepContent /></Suspense>
 }

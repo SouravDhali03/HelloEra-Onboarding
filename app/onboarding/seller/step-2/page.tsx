@@ -2,14 +2,14 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { ArrowLeft } from "lucide-react"
 
 import { SellerStepLayout, getSellerCategorySuggestions } from "@/components/seller-onboarding"
 import { MultiSelectField } from "@/components/student-onboarding"
 import { Button } from "@/components/ui/button"
 
-export default function SellerCategoryStep() {
+function SellerCategoryStepContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const format = searchParams.get("format") ?? ""
@@ -22,4 +22,8 @@ export default function SellerCategoryStep() {
       <MultiSelectField label="Category" placeholder="Search or add a category" suggestions={suggestions} selected={selected} onChange={setSelected} />
     </form>
   </SellerStepLayout>
+}
+
+export default function SellerCategoryStep() {
+  return <Suspense fallback={null}><SellerCategoryStepContent /></Suspense>
 }
