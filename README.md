@@ -106,6 +106,14 @@ Pushes to the `main` branch trigger a new build and deployment. Deployment statu
 3. Run `npm run lint` and `npm run typecheck`.
 4. Open a pull request with a clear summary of the changes.
 
+## Ownership and use
+
+Copyright © 2026 Sourav Dhali03 / HelloEra.
+
+Unless a file states otherwise, the original source code, designs, branding, written content, and other project materials in this repository are retained by the project owner. This repository does not grant permission to copy, modify, redistribute, or use those materials commercially without prior written permission.
+
+Use of GitHub and participation in this repository must follow [GitHub's Terms of Service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service), [Community Guidelines](https://docs.github.com/en/site-policy/github-terms/github-community-guidelines), and applicable laws. This notice does not override the licenses of third-party dependencies or assets.
+
 ## License
 
-No license has been added to this repository yet.
+No separate open-source license has been added to this repository. For permission to reuse HelloEra-specific code, designs, branding, or content, please contact the repository owner.
