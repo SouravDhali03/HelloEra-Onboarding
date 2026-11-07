@@ -51,7 +51,11 @@ export function OnboardingShell({
         >
           <Link href="/sign-up" aria-label="Era home">
             <Image
-              src="/logo.svg"
+              src={
+                process.env.GITHUB_ACTIONS
+                  ? "/HelloEra-Onboarding/logo.svg"
+                  : "/logo.svg"
+              }
               alt="Era"
               width={57}
               height={56}

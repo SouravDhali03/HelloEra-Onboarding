@@ -148,7 +148,11 @@ function DashboardHeader({
     >
       <Link href="/dashboard" aria-label="Era dashboard">
         <Image
-          src="/logo.svg"
+          src={
+            process.env.GITHUB_ACTIONS
+              ? "/HelloEra-Onboarding/logo.svg"
+              : "/logo.svg"
+          }
           alt="Era"
           width={57}
           height={56}
