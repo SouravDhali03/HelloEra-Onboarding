@@ -30,6 +30,10 @@ The application is an active work in progress, so screens and flows may continue
 
 ## Tech stack
 
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nextjs,react,ts,tailwind,github" alt="Tech stack: Next.js, React, TypeScript, Tailwind CSS, and GitHub" />
+</p>
+
 - [Next.js](https://nextjs.org/) with the App Router
 - [React](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
