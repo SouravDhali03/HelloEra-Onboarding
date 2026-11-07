@@ -1,21 +1,111 @@
-# Next.js template
+# HelloEra Onboarding
 
-This is a Next.js template with shadcn/ui.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-222?logo=github)](https://souravdhali03.github.io/HelloEra-Onboarding/)
+[![Deploy to GitHub Pages](https://github.com/SouravDhali03/HelloEra-Onboarding/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/SouravDhali03/HelloEra-Onboarding/actions/workflows/deploy-pages.yml)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-149eca?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript)](https://www.typescriptlang.org/)
 
-## Adding components
+HelloEra Onboarding is the onboarding experience for HelloEra, a student empowerment platform. The project is being developed as a modern, accessible web experience for welcoming users and guiding them into the platform.
 
-To add components to your app, run the following command:
+## Live demo
+
+Visit the deployed application:
+
+**https://souravdhali03.github.io/HelloEra-Onboarding/**
+
+## Current experience
+
+The project currently includes UI routes for:
+
+- Landing and onboarding
+- Account sign-up
+- Account sign-in
+- Email verification
+- Password recovery
+- Dashboard
+- Newsfeed exploration
+
+The application is an active work in progress, so screens and flows may continue to evolve as the HelloEra platform is developed.
+
+## Tech stack
+
+- [Next.js](https://nextjs.org/) with the App Router
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Lucide React](https://lucide.dev/) icons
+- GitHub Actions and GitHub Pages for deployment
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20 or newer
+- npm
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-npx shadcn@latest add button
+git clone https://github.com/SouravDhali03/HelloEra-Onboarding.git
+cd HelloEra-Onboarding
+npm install
 ```
 
-This will place the ui components in the `components` directory.
+Start the development server:
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+```bash
+npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Available scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Check TypeScript types |
+| `npm run format` | Format TypeScript and TSX files with Prettier |
+
+## Project structure
+
+```text
+app/
+├── dashboard/       # Dashboard experience
+├── forgot-password/ # Password recovery
+├── onboarding/      # Onboarding flow
+├── sign-in/         # Sign-in experience
+├── sign-up/         # Account creation
+├── verify-email/    # Email verification
+└── page.tsx         # Root page
+
+components/          # Reusable UI components
+features/newsfeed/   # Newsfeed feature code
+hooks/               # Shared React hooks
+lib/                 # Shared utilities
+public/              # Static assets
+```
+
+## Deployment
+
+The project is deployed automatically to GitHub Pages through the workflow in [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml).
+
+Pushes to the `main` branch trigger a new build and deployment. Deployment status is available in the [GitHub Actions tab](https://github.com/SouravDhali03/HelloEra-Onboarding/actions).
+
+## Contributing
+
+1. Create a feature branch.
+2. Make your changes.
+3. Run `npm run lint` and `npm run typecheck`.
+4. Open a pull request with a clear summary of the changes.
+
+## License
+
+No license has been added to this repository yet.
