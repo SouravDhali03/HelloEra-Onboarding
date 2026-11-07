@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Mail, UserRound } from "lucide-react"
 
 import { AuthShell } from "@/components/auth-shell"
@@ -136,12 +137,12 @@ export default function SignUpPage() {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             <span>Already have an account?</span>
-            <a
+            <Link
               href="/sign-in"
               className="ml-1 font-medium text-foreground underline-offset-4 hover:underline"
             >
               Sign in
-            </a>
+            </Link>
           </p>
         </CardFooter>
       </Card>
