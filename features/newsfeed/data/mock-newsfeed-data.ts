@@ -1,27 +1,69 @@
 import type { Advertisement, Comment, LinkPreview, Post, User } from "../types"
 
+const staticAssetPrefix =
+  process.env.NODE_ENV === "production" ? "/HelloEra-Onboarding" : ""
+
 export const mockAssets = {
-  studyGuide: "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80",
-  teamPhoto: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80",
-  interviewGuide: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
-  portfolio: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1200&q=80",
-  classroom: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
-  workspace: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
-  course: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-  officeVideoPoster: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
-  sponsoredMoneyBag: "/sponsored/leather-money-bag.png",
-  sponsoredHandbag: "/sponsored/structured-handbag.png",
+  studyGuide:
+    "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80",
+  teamPhoto:
+    "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=80",
+  interviewGuide:
+    "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80",
+  portfolio:
+    "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1200&q=80",
+  classroom:
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80",
+  workspace:
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
+  course:
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+  officeVideoPoster:
+    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
+  sponsoredMoneyBag: `${staticAssetPrefix}/sponsored/leather-money-bag.png`,
+  sponsoredHandbag: `${staticAssetPrefix}/sponsored/structured-handbag.png`,
 }
 
-const videoUrl = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+const videoUrl =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
 
 export const mockUsers = {
-  student: { id: "user-student", name: "Sourav Dhali", role: "student", roleLabel: "Student" },
-  tutor: { id: "user-tutor", name: "Maya Chen", role: "tutor", roleLabel: "Tutor" },
-  seller: { id: "user-seller", name: "Noah Williams", role: "seller", roleLabel: "Seller" },
-  freelancer: { id: "user-freelancer", name: "Ava Patel", role: "freelancer", roleLabel: "Freelancer" },
-  jobSeeker: { id: "user-job-seeker", name: "Jordan Lee", role: "job_seeker", roleLabel: "Career / Job Seeker" },
-  employer: { id: "user-employer", name: "Era Labs", role: "employer", roleLabel: "Employer" },
+  student: {
+    id: "user-student",
+    name: "Sourav Dhali",
+    role: "student",
+    roleLabel: "Student",
+  },
+  tutor: {
+    id: "user-tutor",
+    name: "Maya Chen",
+    role: "tutor",
+    roleLabel: "Tutor",
+  },
+  seller: {
+    id: "user-seller",
+    name: "Noah Williams",
+    role: "seller",
+    roleLabel: "Seller",
+  },
+  freelancer: {
+    id: "user-freelancer",
+    name: "Ava Patel",
+    role: "freelancer",
+    roleLabel: "Freelancer",
+  },
+  jobSeeker: {
+    id: "user-job-seeker",
+    name: "Jordan Lee",
+    role: "job_seeker",
+    roleLabel: "Career / Job Seeker",
+  },
+  employer: {
+    id: "user-employer",
+    name: "Era Labs",
+    role: "employer",
+    roleLabel: "Employer",
+  },
 } satisfies Record<string, User>
 
 const comment: Comment = {
@@ -53,7 +95,8 @@ const interviewPreview: LinkPreview = {
   domain: "example.com",
   siteName: "Career Guide",
   title: "A practical interview preparation guide",
-  description: "A concise checklist for preparing, practising and following up.",
+  description:
+    "A concise checklist for preparing, practising and following up.",
   imageUrl: mockAssets.interviewGuide,
   status: "ready",
 }
@@ -62,7 +105,8 @@ export const mockPosts: Post[] = [
   {
     id: "post-owner-current-user",
     author: mockUsers.student,
-    content: "What is one skill you are excited to build this week? I am focusing on better presentation and communication.",
+    content:
+      "What is one skill you are excited to build this week? I am focusing on better presentation and communication.",
     createdAt: "2026-11-07T01:40:00.000Z",
     media: [],
     likeCount: 18,
@@ -77,14 +121,23 @@ export const mockPosts: Post[] = [
   {
     id: "post-comments-tutor",
     author: mockUsers.tutor,
-    content: "A small reminder: progress comes from consistent practice, not from getting everything right on the first try.",
+    content:
+      "A small reminder: progress comes from consistent practice, not from getting everything right on the first try.",
     createdAt: "2026-11-06T22:15:00.000Z",
     media: [],
     likeCount: 41,
     commentCount: 3,
     likedByCurrentUser: true,
     savedByCurrentUser: true,
-    comments: [comment, { ...comment, id: "comment-2", content: "Saving this for later.", replies: [] }],
+    comments: [
+      comment,
+      {
+        ...comment,
+        id: "comment-2",
+        content: "Saving this for later.",
+        replies: [],
+      },
+    ],
     commentsExpanded: false,
     canEdit: false,
     canDelete: false,
@@ -92,14 +145,29 @@ export const mockPosts: Post[] = [
   {
     id: "post-media-link-student",
     author: mockUsers.student,
-    content: "Sharing a few notes from my study session and the resource that helped me organise them.",
+    content:
+      "Sharing a few notes from my study session and the resource that helped me organise them.",
     createdAt: "2026-11-06T20:15:00.000Z",
     media: [
-      { id: "study-1", type: "image", url: mockAssets.studyGuide, alt: "Open notebook with a structured study plan" },
-      { id: "study-2", type: "image", url: mockAssets.course, alt: "Laptop showing an online learning course" },
+      {
+        id: "study-1",
+        type: "image",
+        url: mockAssets.studyGuide,
+        alt: "Open notebook with a structured study plan",
+      },
+      {
+        id: "study-2",
+        type: "image",
+        url: mockAssets.course,
+        alt: "Laptop showing an online learning course",
+      },
     ],
     externalUrl: "https://example.com/study-planner",
-    linkPreview: { ...interviewPreview, url: "https://example.com/study-planner", title: "A simple study planning template" },
+    linkPreview: {
+      ...interviewPreview,
+      url: "https://example.com/study-planner",
+      title: "A simple study planning template",
+    },
     likeCount: 16,
     commentCount: 2,
     likedByCurrentUser: false,
@@ -132,8 +200,19 @@ export const mockPosts: Post[] = [
     content: "A look at our team and the role we are currently hiring for.",
     createdAt: "2026-11-06T17:15:00.000Z",
     media: [
-      { id: "team-1", type: "image", url: mockAssets.teamPhoto, alt: "Team members collaborating around a table" },
-      { id: "team-2", type: "video", url: videoUrl, thumbnailUrl: mockAssets.officeVideoPoster, alt: "Short office and team introduction video" },
+      {
+        id: "team-1",
+        type: "image",
+        url: mockAssets.teamPhoto,
+        alt: "Team members collaborating around a table",
+      },
+      {
+        id: "team-2",
+        type: "video",
+        url: videoUrl,
+        thumbnailUrl: mockAssets.officeVideoPoster,
+        alt: "Short office and team introduction video",
+      },
     ],
     likeCount: 41,
     commentCount: 8,
@@ -149,7 +228,15 @@ export const mockPosts: Post[] = [
     author: mockUsers.freelancer,
     content: "A quick behind-the-scenes look at how I plan a client project.",
     createdAt: "2026-11-06T15:05:00.000Z",
-    media: [{ id: "freelance-video", type: "video", url: videoUrl, thumbnailUrl: mockAssets.workspace, alt: "Behind-the-scenes project planning video" }],
+    media: [
+      {
+        id: "freelance-video",
+        type: "video",
+        url: videoUrl,
+        thumbnailUrl: mockAssets.workspace,
+        alt: "Behind-the-scenes project planning video",
+      },
+    ],
     likeCount: 13,
     commentCount: 1,
     likedByCurrentUser: false,
@@ -162,13 +249,34 @@ export const mockPosts: Post[] = [
   {
     id: "post-multi-image-seller",
     author: mockUsers.seller,
-    content: "A few recent pieces from the studio. Which one would you choose for your workspace?",
+    content:
+      "A few recent pieces from the studio. Which one would you choose for your workspace?",
     createdAt: "2026-11-06T12:20:00.000Z",
     media: [
-      { id: "seller-1", type: "image", url: mockAssets.portfolio, alt: "Colourful creative design work" },
-      { id: "seller-2", type: "image", url: mockAssets.workspace, alt: "Bright modern workspace" },
-      { id: "seller-3", type: "image", url: mockAssets.classroom, alt: "Creative workshop classroom" },
-      { id: "seller-4", type: "image", url: mockAssets.course, alt: "Laptop and design notes" },
+      {
+        id: "seller-1",
+        type: "image",
+        url: mockAssets.portfolio,
+        alt: "Colourful creative design work",
+      },
+      {
+        id: "seller-2",
+        type: "image",
+        url: mockAssets.workspace,
+        alt: "Bright modern workspace",
+      },
+      {
+        id: "seller-3",
+        type: "image",
+        url: mockAssets.classroom,
+        alt: "Creative workshop classroom",
+      },
+      {
+        id: "seller-4",
+        type: "image",
+        url: mockAssets.course,
+        alt: "Laptop and design notes",
+      },
     ],
     likeCount: 29,
     commentCount: 5,
@@ -184,7 +292,14 @@ export const mockPosts: Post[] = [
     author: mockUsers.tutor,
     content: "A visual guide to preparing for your next learning session.",
     createdAt: "2026-11-06T09:40:00.000Z",
-    media: [{ id: "tutor-image", type: "image", url: mockAssets.classroom, alt: "Open classroom prepared for a learning session" }],
+    media: [
+      {
+        id: "tutor-image",
+        type: "image",
+        url: mockAssets.classroom,
+        alt: "Open classroom prepared for a learning session",
+      },
+    ],
     likeCount: 24,
     commentCount: 3,
     likedByCurrentUser: false,
@@ -197,7 +312,8 @@ export const mockPosts: Post[] = [
   {
     id: "post-long-text",
     author: mockUsers.freelancer,
-    content: "There is a lot to learn when you start working independently. The most useful habit I have developed is writing down the outcome I want before I open a new project. It makes decisions easier, keeps feedback focused, and gives everyone a shared definition of done. I still change the plan often, but I no longer confuse changing the plan with losing direction.",
+    content:
+      "There is a lot to learn when you start working independently. The most useful habit I have developed is writing down the outcome I want before I open a new project. It makes decisions easier, keeps feedback focused, and gives everyone a shared definition of done. I still change the plan often, but I no longer confuse changing the plan with losing direction.",
     createdAt: "2026-11-05T18:25:00.000Z",
     media: [],
     likeCount: 9,
@@ -212,7 +328,8 @@ export const mockPosts: Post[] = [
   {
     id: "post-text-student",
     author: mockUsers.student,
-    content: "A good day to learn something new and share the journey with the Era community.",
+    content:
+      "A good day to learn something new and share the journey with the Era community.",
     createdAt: "2026-11-05T10:00:00.000Z",
     media: [],
     likeCount: 7,
