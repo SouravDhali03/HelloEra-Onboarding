@@ -149,7 +149,7 @@ function DashboardHeader({
       <Link href="/dashboard" aria-label="Era dashboard">
         <Image
           src={
-            process.env.GITHUB_ACTIONS
+            process.env.NODE_ENV === "production"
               ? "/HelloEra-Onboarding/logo.svg"
               : "/logo.svg"
           }

@@ -25,7 +25,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           <Link href="/sign-up" aria-label="Era home">
             <Image
               src={
-                process.env.GITHUB_ACTIONS
+                process.env.NODE_ENV === "production"
                   ? "/HelloEra-Onboarding/logo.svg"
                   : "/logo.svg"
               }
