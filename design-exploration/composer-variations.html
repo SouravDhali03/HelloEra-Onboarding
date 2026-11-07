@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Era composer directions</title>
+  <style>
+    :root { font-family: Geist, Inter, system-ui, sans-serif; color: #111; background: #f4f4f5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px; }
+    h1 { margin: 0 0 8px; font-size: 24px; font-weight: 600; }
+    .intro { margin: 0 0 28px; color: #71717a; }
+    .board { display: grid; grid-template-columns: repeat(2, minmax(280px, 512px)); gap: 24px; align-items: start; }
+    .direction { display: grid; gap: 10px; }
+    .direction h2 { margin: 0; font-size: 14px; font-weight: 600; }
+    .direction p { margin: 0; color: #71717a; font-size: 13px; line-height: 1.4; }
+    .surface { background: #fff; border: 1px solid #e4e4e7; border-radius: 20px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+    .muted { color: #71717a; }
+    .avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 999px; background: #f4f4f5; border: 1px solid #e4e4e7; }
+    .row { display: flex; align-items: center; gap: 12px; }
+    .space { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .small { font-size: 12px; }
+    .field { border: 1px solid #e4e4e7; border-radius: 14px; padding: 14px; color: #a1a1aa; background: #fafafa; }
+    .button { border: 0; border-radius: 999px; padding: 10px 16px; background: #2563eb; color: white; font: inherit; font-size: 13px; font-weight: 600; }
+    .ghost { background: #f4f4f5; color: #27272a; }
+    .toolbar { display: flex; gap: 8px; align-items: center; color: #71717a; font-size: 12px; }
+    .tool { border: 1px solid #e4e4e7; border-radius: 999px; padding: 8px 10px; background: #fff; }
+    .inline { display: grid; gap: 14px; }
+    .surface.inline { padding: 8px 16px; border-color: #d4d4d8; box-shadow: 0 4px 16px rgba(24, 24, 27, .06); transition: border-color 180ms ease, box-shadow 180ms ease; }
+    .surface.inline.is-expanded { padding-block: 16px; }
+    .inline .field { flex: 1; border-radius: 999px; padding: 16px 14px; }
+    .inline .field[role="button"] { width: 100%; text-align: left; cursor: pointer; }
+    .inline .field[role="button"]:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    .inline-expanded { display: none; gap: 18px; }
+    .inline-expanded textarea { width: 100%; min-height: 120px; resize: none; border: 0; outline: 0; font: inherit; font-size: 16px; line-height: 1.45; padding: 14px 54px 44px 14px; background: transparent; }
+    .inline-expanded textarea::placeholder { color: #a1a1aa; }
+    .inline.is-expanded .inline-collapsed { display: none; }
+    .inline.is-expanded .inline-expanded { display: grid; }
+    .editor { position: relative; flex: 1; border: 0; border-radius: 20px; background: #f4f4f5; overflow: hidden; }
+    .inline-collapsed .editor { border: 0; background: transparent; }
+    .inline-collapsed .row { gap: 8px; }
+    .editor .field { border: 0; background: transparent; }
+    .editor .brand-publish { position: absolute; right: 10px; bottom: 10px; }
+    .brand-publish { display: grid; place-items: center; min-width: 96px; height: 40px; padding: 0 20px; border: 0; border-radius: 999px; background: #2563eb; color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+    .inline-expanded .editor { border-radius: 16px; }
+    .inline-expanded .icon-button { flex: 0 0 auto; }
+    .icon-button { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 999px; color: #71717a; background: transparent; cursor: pointer; }
+    .icon-button:hover { background: #e4e4e7; color: #27272a; }
+    .icon-button svg { width: 16px; height: 16px; }
+    .icon-button.brand-publish { background: transparent; }
+    .focused { display: grid; gap: 18px; }
+    .focused textarea { width: 100%; min-height: 120px; resize: none; border: 0; outline: 0; font: inherit; font-size: 18px; line-height: 1.45; }
+    .focused textarea::placeholder { color: #a1a1aa; }
+    .sheet { padding: 0; overflow: hidden; }
+    .sheet-head { padding: 16px 20px; border-bottom: 1px solid #e4e4e7; }
+    .sheet-body { padding: 20px; display: grid; gap: 18px; }
+    .sheet .field { min-height: 118px; border: 0; background: transparent; padding: 0; font-size: 18px; }
+    @media (max-width: 760px) { body { padding: 20px; } .board { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Era post composer directions</h1>
+  <p class="intro">The dashboard feed, shell, data, and routes stay unchanged in all directions.</p>
+  <main class="board">
+    <section class="direction">
+      <h2>A. Inline composer</h2>
+      <p>One quiet row keeps the feed in focus. The writing controls appear after the prompt is opened.</p>
+      <div class="surface inline" id="inline-composer">
+        <div class="inline-collapsed">
+          <div class="row"><div class="avatar">S</div><div class="editor"><div class="field" role="button" tabindex="0" onclick="expandInline()" onkeydown="if (event.key === 'Enter' || event.key === ' ') expandInline()">What's on your mind?</div></div></div>
+        </div>
+        <div class="inline-expanded">
+          <div class="space"><div class="row"><div class="avatar">S</div><div><strong>Sami Rahman</strong><div class="muted small">Share with the Era community</div></div></div><button class="icon-button" aria-label="Close composer" onclick="collapseInline()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12" /></svg></button></div>
+          <div class="editor"><textarea autofocus placeholder="What are you learning, building, or looking for?"></textarea></div>
+          <div class="space"><div class="toolbar"><button class="icon-button" aria-label="Add image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></button><button class="icon-button" aria-label="Add attachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button></div><button class="button">Post</button></div>
+        </div>
+      </div>
+    </section>
+    <section class="direction">
+      <h2>B. Focused composer</h2>
+      <p>The writing surface leads. The Era mark stays inside the field as the publishing action.</p>
+      <div class="surface focused">
+        <div class="space"><div class="row"><div class="avatar">S</div><div><strong>Sami Rahman</strong><div class="muted small">Share with the Era community</div></div></div><span class="muted small">Anyone ·⌄</span></div>
+          <div class="editor"><textarea placeholder="What are you learning, building, or looking for?"></textarea></div>
+      </div>
+    </section>
+    <section class="direction">
+      <h2>C. Sheet composer</h2>
+      <p>A mobile-first sheet gives the writing task a clear start and keeps the action in the header.</p>
+      <div class="surface sheet">
+        <div class="sheet-head space"><span class="muted">Cancel</span><strong>New post</strong><button class="button">Post</button></div>
+        <div class="sheet-body"><div class="row"><div class="avatar">S</div><span class="small">Sami Rahman · Anyone</span></div><div class="editor"><div class="field">What are you learning, building, or looking for?</div></div><div class="space"><span></span><button class="button">Post</button></div></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    function expandInline() {
+      document.getElementById('inline-composer').classList.add('is-expanded')
+      document.querySelector('#inline-composer textarea').focus()
+    }
+    function collapseInline() {
+      document.getElementById('inline-composer').classList.remove('is-expanded')
+    }
+  </script>
+</body>
+</html>

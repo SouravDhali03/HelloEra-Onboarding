@@ -9,12 +9,14 @@ export const mockAssets = {
   workspace: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
   course: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
   officeVideoPoster: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
+  sponsoredMoneyBag: "/sponsored/leather-money-bag.png",
+  sponsoredHandbag: "/sponsored/structured-handbag.png",
 }
 
 const videoUrl = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
 
 export const mockUsers = {
-  student: { id: "user-student", name: "Sami Rahman", role: "student", roleLabel: "Student" },
+  student: { id: "user-student", name: "Sourav Dhali", role: "student", roleLabel: "Student" },
   tutor: { id: "user-tutor", name: "Maya Chen", role: "tutor", roleLabel: "Tutor" },
   seller: { id: "user-seller", name: "Noah Williams", role: "seller", roleLabel: "Seller" },
   freelancer: { id: "user-freelancer", name: "Ava Patel", role: "freelancer", roleLabel: "Freelancer" },
@@ -227,9 +229,9 @@ export const mockPosts: Post[] = [
 export const mockAdvertisements: Advertisement[] = [
   {
     id: "ad-learning-kit",
-    title: "Build your next skill",
+    title: "Keep your money organized",
     description: "Explore guided learning paths from the Era community.",
-    imageUrl: mockAssets.course,
+    imageUrl: mockAssets.sponsoredMoneyBag,
     targetUrl: "https://example.com/learning",
     advertiserName: "Era Learning",
     callToAction: "Explore learning",
@@ -238,9 +240,9 @@ export const mockAdvertisements: Advertisement[] = [
   },
   {
     id: "ad-creator-tools",
-    title: "Make room for better work",
+    title: "Carry your everyday essentials",
     description: "Tools and resources for independent creators.",
-    imageUrl: mockAssets.workspace,
+    imageUrl: mockAssets.sponsoredHandbag,
     targetUrl: "https://example.com/creator-tools",
     advertiserName: "Era Marketplace",
     callToAction: "View tools",
