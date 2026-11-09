@@ -29,6 +29,7 @@ import {
 
 import { AccountMenu } from "@/components/account-menu"
 import { DashboardHeaderPopover } from "@/components/dashboard-header-actions"
+import { DashboardMobileNavigation } from "@/components/dashboard-mobile-navigation"
 import { NewsfeedPage } from "@/features/newsfeed/components/newsfeed-page"
 import type { UserRole } from "@/features/newsfeed/types"
 import { Button } from "@/components/ui/button"
@@ -44,7 +45,6 @@ import {
   SidebarProvider,
   SidebarInset,
   SidebarSeparator,
-  SidebarTrigger,
 } from "@/components/ui/sidebar"
 
 const roleMenus = {
@@ -226,7 +226,7 @@ function DashboardBody({
             <NewsfeedPage activeRole={toNewsfeedRole(role)} />
           </SidebarInset>
         </div>
-        <MobileNavigation />
+        <DashboardMobileNavigation />
       </SidebarProvider>
     </section>
   )
@@ -245,7 +245,7 @@ function DashboardSidebar({
       className="top-16 h-[calc(100svh-4rem)] overflow-hidden !border-r-0 bg-transparent md:group-data-[state=expanded]:data-[side=left]:left-[var(--dashboard-gutter)]"
     >
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="max-md:hidden">
           <SidebarGroupLabel className="text-[11px] tracking-wide uppercase">
             General
           </SidebarGroupLabel>
@@ -264,7 +264,7 @@ function DashboardSidebar({
             )}
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarSeparator />
+        <SidebarSeparator className="max-md:hidden" />
         {roleMenu.items.length ? (
           <SidebarGroup>
             <SidebarGroupLabel className="text-[11px] tracking-wide uppercase">
@@ -300,39 +300,5 @@ function DashboardSidebar({
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
-}
-
-function MobileNavigation() {
-  return (
-    <nav
-      data-slot="mobile-navigation"
-      aria-label="Mobile navigation"
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t bg-background/95 p-2.5 backdrop-blur md:hidden"
-    >
-      <Button variant="ghost" size="icon-sm" className="mx-auto" asChild>
-        <Link href="/dashboard" aria-label="Newsfeed">
-          <Newspaper data-icon="inline-start" />
-        </Link>
-      </Button>
-      <Button variant="ghost" size="icon-sm" className="mx-auto" asChild>
-        <Link href="/dashboard#marketplace" aria-label="Marketplace">
-          <ShoppingBag data-icon="inline-start" />
-        </Link>
-      </Button>
-      <Button variant="ghost" size="icon-sm" className="mx-auto" asChild>
-        <Link href="/dashboard#resources" aria-label="Resources">
-          <BookOpen data-icon="inline-start" />
-        </Link>
-      </Button>
-      <Button variant="ghost" size="icon-sm" className="mx-auto" asChild>
-        <Link href="/dashboard#saved" aria-label="Saved">
-          <Bookmark data-icon="inline-start" />
-        </Link>
-      </Button>
-      <div className="flex items-center justify-center">
-        <SidebarTrigger className="size-8" aria-label="Open more navigation" />
-      </div>
-    </nav>
   )
 }
