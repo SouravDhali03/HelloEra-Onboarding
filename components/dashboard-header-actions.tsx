@@ -1,6 +1,6 @@
 "use client"
 
-import { Bell, MessageCircle, ShoppingCart } from "lucide-react"
+import { Bell, MessageCircleMore, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 
 import {
@@ -23,7 +23,7 @@ import {
 
 const headerIcons = {
   cart: ShoppingCart,
-  messages: MessageCircle,
+  messages: MessageCircleMore,
   notifications: Bell,
 } as const
 

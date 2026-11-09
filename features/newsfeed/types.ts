@@ -47,6 +47,7 @@ export type Comment = {
   likeCount: number
   likedByCurrentUser: boolean
   parentCommentId?: string | null
+  replyTo?: Pick<User, "id" | "name">
   replies?: Comment[]
   canEdit: boolean
   canDelete: boolean
