@@ -214,6 +214,7 @@ function CommentRow({
       <RoleAvatar
         name={comment.author.name}
         role={roleAvatarRole(comment.author.role)}
+        avatarUrl={comment.author.avatarUrl}
         showBadge={false}
       />
       <div className="min-w-0 flex-1">
@@ -458,6 +459,7 @@ function PostCard({
         <RoleAvatar
           name={post.author.name}
           role={roleAvatarRole(post.author.role)}
+          avatarUrl={post.author.avatarUrl}
           size="lg"
           showBadge={false}
         />

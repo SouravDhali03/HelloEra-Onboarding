@@ -39,12 +39,16 @@ export const mockUsers = {
     name: "Maya Chen",
     role: "tutor",
     roleLabel: "Tutor",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80",
   },
   seller: {
     id: "user-seller",
     name: "Noah Williams",
     role: "seller",
     roleLabel: "Seller",
+    avatarUrl:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
   },
   freelancer: {
     id: "user-freelancer",

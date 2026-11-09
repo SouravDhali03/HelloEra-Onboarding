@@ -1,0 +1,147 @@
+import type { Resource } from "../types"
+
+export const mockResources: Resource[] = [
+  {
+    id: "study-planning",
+    title: "A simple study planning template",
+    description:
+      "Build a realistic weekly plan that helps you make steady progress.",
+    category: "Academic",
+    subject: "Study Skills",
+    tags: ["Planning", "Productivity"],
+    type: "Guide",
+    language: "English",
+    difficulty: "Beginner",
+    author: "HelloEra Learning Team",
+    readingTime: 8,
+    publishedAt: "2026-11-07",
+    updatedAt: "2026-11-07",
+    imageUrl:
+      "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["student", "tutor"],
+    content: [
+      "A useful plan starts with the time you actually have, not an ideal schedule.",
+      "Choose one or two priorities for the week and turn them into small sessions.",
+      "Review your plan at the end of the week and keep what worked.",
+    ],
+  },
+  {
+    id: "interview-preparation",
+    title: "A practical interview preparation guide",
+    description:
+      "A concise checklist for preparing, practising, and following up.",
+    category: "Career",
+    subject: "Job Search",
+    tags: ["Interviews", "Career"],
+    type: "Guide",
+    language: "English",
+    difficulty: "Intermediate",
+    author: "Career Guide",
+    readingTime: 12,
+    publishedAt: "2026-11-06",
+    updatedAt: "2026-11-06",
+    imageUrl:
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["job_seeker", "student"],
+    content: [
+      "Start by understanding the role and preparing two or three relevant examples.",
+      "Use a simple structure to explain the situation, your action, and the result.",
+      "Send a short follow-up message that reinforces your interest.",
+    ],
+  },
+  {
+    id: "portfolio-foundations",
+    title: "Portfolio foundations for independent work",
+    description:
+      "Turn your best work into a clear story clients and employers can understand.",
+    category: "Skills",
+    subject: "Portfolio",
+    tags: ["Freelancing", "Portfolio"],
+    type: "Article",
+    language: "English",
+    difficulty: "Intermediate",
+    author: "Ava Patel",
+    readingTime: 10,
+    publishedAt: "2026-11-05",
+    updatedAt: "2026-11-05",
+    imageUrl:
+      "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["freelancer", "job_seeker"],
+    content: [
+      "A portfolio is a guided tour of your decisions, not only a gallery of finished work.",
+      "For every project, explain the problem, your contribution, and the outcome.",
+      "Keep the first screen focused on the work you want to do more often.",
+    ],
+  },
+  {
+    id: "teaching-with-feedback",
+    title: "Teaching with useful feedback",
+    description:
+      "Practical ways to make feedback specific, kind, and easy to act on.",
+    category: "Skills",
+    subject: "Teaching",
+    tags: ["Tutoring", "Feedback"],
+    type: "Notes",
+    language: "English",
+    difficulty: "Beginner",
+    author: "Maya Chen",
+    pageCount: 6,
+    publishedAt: "2026-11-04",
+    updatedAt: "2026-11-04",
+    imageUrl:
+      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["tutor", "student"],
+    content: [
+      "Describe the work you observed before suggesting the next step.",
+      "Keep one feedback conversation focused on one improvement opportunity.",
+      "End by asking the learner to explain what they will try next.",
+    ],
+  },
+  {
+    id: "product-photography",
+    title: "Product photography with everyday light",
+    description:
+      "Create clearer product images with a simple setup and consistent framing.",
+    category: "Business",
+    subject: "Marketing",
+    tags: ["Selling", "Photography"],
+    type: "Article",
+    language: "English",
+    difficulty: "Beginner",
+    author: "HelloEra Commerce Team",
+    readingTime: 7,
+    publishedAt: "2026-11-03",
+    updatedAt: "2026-11-03",
+    imageUrl:
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["seller", "freelancer"],
+    content: [
+      "Use a window as your first light source and turn off mixed indoor lighting.",
+      "Leave enough space around the product so the image can be reused in different layouts.",
+      "Take a detail shot and one image that shows the product in context.",
+    ],
+  },
+  {
+    id: "career-notes",
+    title: "Notes for building a career habit",
+    description:
+      "Small routines that make learning and career progress easier to sustain.",
+    category: "General Learning",
+    subject: "Career",
+    tags: ["Habits", "Growth"],
+    type: "PDF",
+    language: "English",
+    difficulty: "Beginner",
+    author: "HelloEra Learning Team",
+    pageCount: 14,
+    publishedAt: "2026-11-02",
+    updatedAt: "2026-11-02",
+    imageUrl:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+    roleRelevance: ["student", "job_seeker", "freelancer"],
+    content: [
+      "This PDF reader preview represents the embedded reading experience.",
+      "The production reader can replace this content with the stored document asset.",
+    ],
+  },
+]

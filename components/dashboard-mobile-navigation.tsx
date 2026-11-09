@@ -7,38 +7,54 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
+type NavigationKey = "newsfeed" | "marketplace" | "resources" | "saved" | "none"
+
 const navigationItems = [
   { key: "newsfeed", label: "Newsfeed", icon: Newspaper, href: "/dashboard" },
   {
     key: "marketplace",
     label: "Marketplace",
     icon: ShoppingBag,
-    href: "/dashboard#marketplace",
+    href: "/coming-soon/marketplace",
   },
   {
     key: "resources",
     label: "Resources",
     icon: BookOpen,
-    href: "/dashboard#resources",
+    href: "/resources",
   },
-  { key: "saved", label: "Saved", icon: Bookmark, href: "/dashboard#saved" },
+  { key: "saved", label: "Saved", icon: Bookmark, href: "/coming-soon/saved" },
 ] as const
 
-function getActiveKey() {
+function getActiveKey(): NavigationKey {
   const hash = window.location.hash.slice(1)
-  return hash ? decodeURIComponent(hash) : "newsfeed"
+  const key = hash ? decodeURIComponent(hash) : "newsfeed"
+  return ["newsfeed", "marketplace", "resources", "saved"].includes(key)
+    ? (key as NavigationKey)
+    : "newsfeed"
 }
 
-export function DashboardMobileNavigation() {
-  const [activeKey, setActiveKey] = useState("newsfeed")
+export function DashboardMobileNavigation({
+  activeKey: routeActiveKey = "newsfeed",
+}: {
+  activeKey?: NavigationKey
+}) {
+  const [hashActiveKey, setHashActiveKey] = useState<NavigationKey>("newsfeed")
 
   useEffect(() => {
-    const updateActiveItem = () => setActiveKey(getActiveKey())
+    if (routeActiveKey !== "newsfeed") {
+      return
+    }
+
+    const updateActiveItem = () => setHashActiveKey(getActiveKey())
 
     updateActiveItem()
     window.addEventListener("hashchange", updateActiveItem)
     return () => window.removeEventListener("hashchange", updateActiveItem)
-  }, [])
+  }, [routeActiveKey])
+
+  const activeKey =
+    routeActiveKey === "newsfeed" ? hashActiveKey : routeActiveKey
 
   return (
     <nav
@@ -62,7 +78,7 @@ export function DashboardMobileNavigation() {
               href={href}
               aria-label={label}
               aria-current={isActive ? "page" : undefined}
-              onClick={() => setActiveKey(key)}
+              onClick={() => setHashActiveKey(key)}
             >
               <Icon data-icon="inline-start" />
             </Link>

@@ -14,7 +14,12 @@ import {
   Store,
 } from "lucide-react"
 
-import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar"
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 import { getStoredUserName } from "@/lib/user-profile"
 import {
   DropdownMenu,
@@ -43,12 +48,14 @@ function initials(name: string) {
 export function RoleAvatar({
   role = "student",
   name,
+  avatarUrl,
   size = "default",
   className,
   showBadge = true,
 }: {
   role?: string
   name?: string
+  avatarUrl?: string
   size?: "default" | "sm" | "lg"
   className?: string
   showBadge?: boolean
@@ -59,6 +66,9 @@ export function RoleAvatar({
 
   return (
     <Avatar size={size} className={className}>
+      {avatarUrl ? (
+        <AvatarImage src={avatarUrl} alt={`${name ?? "User"}'s avatar`} />
+      ) : null}
       <AvatarFallback>{name ? initials(name) : "S"}</AvatarFallback>
       {showBadge ? (
         <AvatarBadge>
