@@ -893,10 +893,9 @@ export function NewsfeedPage({
         data-slot="newsfeed-content-container"
         className="mx-auto flex w-full max-w-none items-start justify-between gap-6"
       >
-        <main
+        <div
           data-slot="newsfeed-column"
           className="mx-auto flex w-full max-w-lg min-w-0 flex-col gap-4"
-          aria-label="Newsfeed"
         >
           <NewsfeedComposer
             currentRole={activeRole}
@@ -940,7 +939,7 @@ export function NewsfeedPage({
               />
             ))
           )}
-        </main>
+        </div>
         <AdvertisementRail />
       </div>
     </section>

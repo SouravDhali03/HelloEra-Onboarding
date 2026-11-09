@@ -29,6 +29,7 @@ import {
 
 export default function SignInPage() {
   const [showErrors, setShowErrors] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState("")
   return (
     <AuthShell>
       <Card className="w-full max-w-[22.5rem] shadow-none">
@@ -45,6 +46,8 @@ export default function SignInPage() {
             className="flex flex-col gap-6"
             noValidate
             onSubmit={(event) => {
+              event.preventDefault()
+              setSubmitMessage("")
               const form = event.currentTarget
               const hasInvalidField = Array.from(form.elements).some(
                 (element) =>
@@ -53,9 +56,11 @@ export default function SignInPage() {
                     !element.checkValidity())
               )
               if (hasInvalidField) {
-                event.preventDefault()
                 setShowErrors(true)
+                return
               }
+
+              setSubmitMessage("Sign-in is not connected yet.")
             }}
           >
             <FieldGroup className="gap-4">
@@ -97,6 +102,12 @@ export default function SignInPage() {
                 />
               </Field>
             </FieldGroup>
+
+            {submitMessage ? (
+              <p role="status" className="text-sm text-muted-foreground">
+                {submitMessage}
+              </p>
+            ) : null}
 
             <FieldSeparator>or continue with</FieldSeparator>
             <SocialLoginButtons />

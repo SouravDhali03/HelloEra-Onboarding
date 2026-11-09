@@ -103,10 +103,10 @@ const generalNavigationItems: Array<{
     key: "marketplace",
     label: "Marketplace",
     icon: ShoppingBag,
-    href: "/coming-soon/marketplace",
+    href: "/marketplace",
   },
   { key: "resources", label: "Resources", icon: BookOpen, href: "/resources" },
-  { key: "saved", label: "Saved", icon: Bookmark, href: "/coming-soon/saved" },
+  { key: "saved", label: "Saved", icon: Bookmark, href: "/saved" },
 ]
 
 export function AppLayout({
@@ -194,7 +194,7 @@ function DashboardHeader({ role }: { role: DashboardRole }) {
           description="Items you add from the marketplace will appear here."
           action={{
             label: "Browse marketplace",
-            href: "/coming-soon/marketplace",
+            href: "/marketplace",
           }}
         />
         <DashboardHeaderPopover
@@ -264,7 +264,7 @@ function DashboardSidebar({
                     asChild
                     isActive={activeModule === toModuleSlug(label)}
                   >
-                    <Link href={`/coming-soon/${toModuleSlug(label)}`}>
+                    <Link href={`/${toModuleSlug(label)}`}>
                       <Icon data-icon="inline-start" />
                       {label}
                     </Link>
@@ -279,7 +279,7 @@ function DashboardSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={activeModule === "settings"}>
-              <Link href="/coming-soon/settings">
+              <Link href="/settings">
                 <Settings data-icon="inline-start" />
                 Settings
               </Link>

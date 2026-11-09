@@ -24,7 +24,7 @@ function getActiveNav(module: string): DashboardNavigationKey {
   return "none"
 }
 
-export default async function ComingSoonRoute({
+export default async function ModuleRoute({
   params,
 }: {
   params: Promise<{ module: string }>

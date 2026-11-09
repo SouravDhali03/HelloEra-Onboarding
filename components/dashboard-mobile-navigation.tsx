@@ -15,7 +15,7 @@ const navigationItems = [
     key: "marketplace",
     label: "Marketplace",
     icon: ShoppingBag,
-    href: "/coming-soon/marketplace",
+    href: "/marketplace",
   },
   {
     key: "resources",
@@ -23,7 +23,7 @@ const navigationItems = [
     icon: BookOpen,
     href: "/resources",
   },
-  { key: "saved", label: "Saved", icon: Bookmark, href: "/coming-soon/saved" },
+  { key: "saved", label: "Saved", icon: Bookmark, href: "/saved" },
 ] as const
 
 function getActiveKey(): NavigationKey {
