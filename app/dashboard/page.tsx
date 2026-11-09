@@ -29,7 +29,6 @@ import { DashboardHeaderPopover } from "@/components/dashboard-header-actions"
 import { DashboardMobileNavigation } from "@/components/dashboard-mobile-navigation"
 import { NewsfeedPage } from "@/features/newsfeed/components/newsfeed-page"
 import type { UserRole } from "@/features/newsfeed/types"
-import { Button } from "@/components/ui/button"
 import {
   Sidebar,
   SidebarContent,
@@ -169,9 +168,6 @@ function DashboardHeader({
             href: "/dashboard#marketplace",
           }}
         />
-        <Button variant="ghost" size="icon-lg" aria-label="Search">
-          <Search data-icon="inline-start" />
-        </Button>
         <DashboardHeaderPopover
           icon="messages"
           label="Open messages"

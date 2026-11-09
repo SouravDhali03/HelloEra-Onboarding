@@ -552,7 +552,7 @@ function PostCard({
             aria-expanded={commentsOpen}
           >
             <MessageCircle data-icon="inline-start" />
-            <span>{post.comments.length ? post.commentCount : 0}</span>
+            <span>{post.commentCount}</span>
           </Button>
         </div>
       </CardFooter>
