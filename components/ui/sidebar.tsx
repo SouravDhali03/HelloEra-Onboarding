@@ -190,7 +190,7 @@ function Sidebar({
           data-slot="sidebar"
           data-mobile="true"
           className={cn(
-            "w-(--sidebar-width) border-0 bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+            "w-(--sidebar-width) border-0 bg-sidebar p-0 text-sidebar-foreground data-[side=right]:border-l-0 [&>button]:hidden"
           )}
           style={
             {
