@@ -9,7 +9,14 @@ import { StudentStepLayout } from "@/components/student-onboarding"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-const levels = ["Primary school student", "Higher school student", "College student", "University student", "Independent learner", "Professional upskilling"]
+const levels = [
+  "Primary school student",
+  "Higher school student",
+  "College student",
+  "University student",
+  "Independent learner",
+  "Professional upskilling",
+]
 
 export default function RoleStepOnePage() {
   const router = useRouter()
@@ -17,10 +24,40 @@ export default function RoleStepOnePage() {
   const [level, setLevel] = useState("")
 
   return (
-    <StudentStepLayout step={1} description="What education setting describes you most?" actions={<><Button asChild variant="outline" size="icon" aria-label="Back"><Link href="/onboarding"><ArrowLeft data-icon="inline-start" /></Link></Button><Button type="submit" form="student-level" disabled={!level}>Continue</Button></>}> 
-      <form id="student-level" onSubmit={(event) => { event.preventDefault(); router.push(`/onboarding/${role}/step-2`) }}>
+    <StudentStepLayout
+      step={1}
+      description="What education setting describes you most?"
+      actions={
+        <>
+          <Button asChild variant="outline" size="icon" aria-label="Back">
+            <Link href="/onboarding">
+              <ArrowLeft data-icon="inline-start" />
+            </Link>
+          </Button>
+          <Button type="submit" form="student-level" disabled={!level}>
+            Continue
+          </Button>
+        </>
+      }
+    >
+      <form
+        id="student-level"
+        onSubmit={(event) => {
+          event.preventDefault()
+          router.push(`/onboarding/${role}/step-2`)
+        }}
+      >
         <RadioGroup value={level} onValueChange={setLevel} className="gap-2">
-          {levels.map((option) => <label key={option} htmlFor={option} className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 text-sm hover:bg-muted/40"><RadioGroupItem id={option} value={option} /><span>{option}</span></label>)}
+          {levels.map((option) => (
+            <label
+              key={option}
+              htmlFor={option}
+              className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 text-sm hover:bg-muted/40"
+            >
+              <RadioGroupItem id={option} value={option} />
+              <span>{option}</span>
+            </label>
+          ))}
         </RadioGroup>
       </form>
     </StudentStepLayout>

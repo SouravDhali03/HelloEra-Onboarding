@@ -8,11 +8,9 @@ import {
   CalendarCheck,
   CalendarDays,
   ChartNoAxesColumnIncreasing,
-  Bell,
   FileText,
   Images,
   ListChecks,
-  MessageCircle,
   Newspaper,
   Search,
   Settings,
@@ -23,7 +21,6 @@ import {
   UserRound,
   Users,
   Video,
-  ShoppingCart,
   type LucideIcon,
 } from "lucide-react"
 

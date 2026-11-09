@@ -4,6 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react"
+import Link from "next/link"
 import {
   Bookmark,
   Flag,
@@ -65,6 +66,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { createPostShareUrl } from "@/lib/share-url"
 import { Textarea } from "@/components/ui/textarea"
 import { getStoredUserName } from "@/lib/user-profile"
 import { LinkPreviewCard, NewsfeedComposer } from "./newsfeed-composer"
@@ -81,8 +83,20 @@ function roleAvatarRole(role: UserRole) {
   return role === "job_seeker" ? "job-seeker" : role
 }
 
+function roleLabel(role: UserRole) {
+  const labels: Record<UserRole, string> = {
+    student: "Student",
+    job_seeker: "Career / Job Seeker",
+    freelancer: "Freelancer",
+    tutor: "Tutor",
+    seller: "Seller",
+    employer: "Employer",
+  }
+  return labels[role]
+}
+
 async function sharePost(postId: string) {
-  const url = `${window.location.origin}/dashboard#post-${postId}`
+  const url = createPostShareUrl(postId)
   try {
     if (navigator.share) {
       await navigator.share({ title: "Era Newsfeed", url })
@@ -105,6 +119,29 @@ function timeAgo(value: string) {
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m`
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`
   return `${Math.floor(seconds / 86400)}d`
+}
+
+function CommentContent({ comment }: { comment: Comment }) {
+  if (!comment.replyTo) {
+    return <p className="mt-1 text-sm whitespace-pre-wrap">{comment.content}</p>
+  }
+
+  const mention = `@${comment.replyTo.name}`
+  const content = comment.content.startsWith(`${mention} `)
+    ? comment.content.slice(mention.length + 1)
+    : comment.content
+
+  return (
+    <p className="mt-1 text-sm whitespace-pre-wrap">
+      <Link
+        href={`/profile/${comment.replyTo.id}`}
+        className="font-medium text-primary hover:underline"
+      >
+        {comment.replyTo.name}
+      </Link>
+      {content ? ` ${content}` : null}
+    </p>
+  )
 }
 
 function sponsorWebsite(url: string) {
@@ -159,10 +196,17 @@ function MediaGrid({ media }: { media: MediaItem[] }) {
 function CommentRow({
   comment,
   onDelete,
+  onEdit,
+  onReply,
+  onReport,
 }: {
   comment: Comment
-  onDelete: () => void
+  onDelete: (comment: Comment) => void
+  onEdit: (comment: Comment) => void
+  onReply: (comment: Comment) => void
+  onReport: (comment: Comment) => void
 }) {
+  const isOwned = comment.canEdit || comment.canDelete
   const [liked, setLiked] = useState(comment.likedByCurrentUser)
   const [likeCount, setLikeCount] = useState(comment.likeCount)
   return (
@@ -179,39 +223,97 @@ function CommentRow({
             {timeAgo(comment.createdAt)}
           </span>
         </div>
-        <p className="mt-1 text-sm whitespace-pre-wrap">{comment.content}</p>
+        <CommentContent comment={comment} />
         <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-          <button
-            type="button"
-            className={
-              liked ? "font-medium text-primary" : "hover:text-foreground"
-            }
-            onClick={() => {
-              setLiked(!liked)
-              setLikeCount(likeCount + (liked ? -1 : 1))
-            }}
-          >
-            Like {likeCount ? `· ${likeCount}` : ""}
-          </button>
-          <button type="button" className="hover:text-foreground">
-            Reply
-          </button>
-          {comment.canDelete ? (
-            <button
-              type="button"
-              className="hover:text-destructive"
-              onClick={onDelete}
-            >
-              Delete
-            </button>
-          ) : null}
+          {isOwned ? (
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="-ml-2 size-7"
+                  aria-label={`More actions for ${comment.author.name}'s comment`}
+                >
+                  <MoreHorizontal data-icon="inline-start" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuGroup>
+                  {comment.canEdit ? (
+                    <DropdownMenuItem onSelect={() => onEdit(comment)}>
+                      <Pencil data-icon="inline-start" />
+                      Edit
+                    </DropdownMenuItem>
+                  ) : null}
+                  {comment.canDelete ? (
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={() => onDelete(comment)}
+                    >
+                      <Trash2 data-icon="inline-start" />
+                      Delete
+                    </DropdownMenuItem>
+                  ) : null}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-7 px-0 hover:bg-transparent",
+                  liked && "font-medium text-primary"
+                )}
+                onClick={() => {
+                  setLiked(!liked)
+                  setLikeCount(likeCount + (liked ? -1 : 1))
+                }}
+              >
+                Like {likeCount ? `· ${likeCount}` : ""}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 px-0 hover:bg-transparent"
+                onClick={() => onReply(comment)}
+              >
+                Reply
+              </Button>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="-ml-1 size-7"
+                    aria-label={`More actions for ${comment.author.name}'s comment`}
+                  >
+                    <MoreHorizontal data-icon="inline-start" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuItem onSelect={() => onReport(comment)}>
+                    <Flag data-icon="inline-start" />
+                    Report
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          )}
         </div>
         {comment.replies?.length ? (
           <div className="mt-3 flex flex-col gap-3 pl-3">
-            <CommentRow
-              comment={comment.replies[0]}
-              onDelete={() => undefined}
-            />
+            {comment.replies.map((reply) => (
+              <CommentRow
+                key={reply.id}
+                comment={reply}
+                onDelete={onDelete}
+                onEdit={onEdit}
+                onReply={onReply}
+                onReport={onReport}
+              />
+            ))}
           </div>
         ) : null}
       </div>
@@ -285,20 +387,26 @@ function PostMenu({
 function PostCard({
   post,
   currentUserName,
+  activeRole,
   onLike,
   onSave,
   onDelete,
   onUpdate,
   onComment,
+  onUpdateComment,
+  onDeleteComment,
   onToggleComments,
 }: {
   post: Post
   currentUserName: string
+  activeRole: UserRole
   onLike: () => void
   onSave: () => void
   onDelete: () => void
   onUpdate: (content: string) => void
   onComment: (comment: Comment) => void
+  onUpdateComment: (commentId: string, content: string) => void
+  onDeleteComment: (commentId: string) => void
   onToggleComments: () => void
 }) {
   const [editOpen, setEditOpen] = useState(false)
@@ -308,6 +416,12 @@ function PostCard({
   const [commentText, setCommentText] = useState("")
   const [commentsOpen, setCommentsOpen] = useState(false)
   const [textExpanded, setTextExpanded] = useState(false)
+  const [commentEditOpen, setCommentEditOpen] = useState(false)
+  const [commentDeleteOpen, setCommentDeleteOpen] = useState(false)
+  const [commentReportOpen, setCommentReportOpen] = useState(false)
+  const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
+  const [commentEditContent, setCommentEditContent] = useState("")
+  const [replyTarget, setReplyTarget] = useState<Comment | null>(null)
   const visibleComments = post.commentsExpanded
     ? post.comments
     : post.comments.slice(0, 2)
@@ -318,19 +432,24 @@ function PostCard({
     onComment({
       id: `comment-${Date.now()}`,
       author: {
-        id: "user-student",
+        id: `user-${activeRole}`,
         name: currentUserName,
-        role: "student",
-        roleLabel: "Student",
+        role: activeRole,
+        roleLabel: roleLabel(activeRole),
       },
       content,
       createdAt: new Date().toISOString(),
       likeCount: 0,
       likedByCurrentUser: false,
+      parentCommentId: replyTarget?.id ?? null,
+      replyTo: replyTarget
+        ? { id: replyTarget.author.id, name: replyTarget.author.name }
+        : undefined,
       canEdit: true,
       canDelete: true,
     })
     setCommentText("")
+    setReplyTarget(null)
   }
 
   return (
@@ -424,7 +543,10 @@ function PostCard({
             )}
             onClick={() => {
               setCommentsOpen(!commentsOpen)
-              if (commentsOpen) setCommentText("")
+              if (commentsOpen) {
+                setCommentText("")
+                setReplyTarget(null)
+              }
             }}
             aria-label="Comment on post"
             aria-expanded={commentsOpen}
@@ -445,7 +567,23 @@ function PostCard({
                 <CommentRow
                   key={comment.id}
                   comment={comment}
-                  onDelete={() => undefined}
+                  onEdit={(targetComment) => {
+                    setSelectedComment(targetComment)
+                    setCommentEditContent(targetComment.content)
+                    setCommentEditOpen(true)
+                  }}
+                  onDelete={(targetComment) => {
+                    setSelectedComment(targetComment)
+                    setCommentDeleteOpen(true)
+                  }}
+                  onReply={(targetComment) => {
+                    setReplyTarget(targetComment)
+                    setCommentText(`@${targetComment.author.name} `)
+                  }}
+                  onReport={(targetComment) => {
+                    setSelectedComment(targetComment)
+                    setCommentReportOpen(true)
+                  }}
                 />
               ))}
             </div>
@@ -470,7 +608,11 @@ function PostCard({
             <Textarea
               value={commentText}
               onChange={(event) => setCommentText(event.target.value)}
-              placeholder="Write a comment..."
+              placeholder={
+                replyTarget
+                  ? `Replying to ${replyTarget.author.name}...`
+                  : "Write a comment..."
+              }
               aria-label="Write a comment"
               className="min-h-10 resize-none"
             />
@@ -544,6 +686,101 @@ function PostCard({
             <Button
               onClick={() => {
                 setReportOpen(false)
+                toast.success("Thanks. Your report was received in demo mode.")
+              }}
+            >
+              Submit report
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={commentEditOpen} onOpenChange={setCommentEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit comment</DialogTitle>
+            <DialogDescription>
+              Update your comment before saving the changes.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={commentEditContent}
+            onChange={(event) => setCommentEditContent(event.target.value)}
+            aria-label="Comment content"
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button
+              disabled={!commentEditContent.trim() || !selectedComment}
+              onClick={() => {
+                if (!selectedComment) return
+                onUpdateComment(selectedComment.id, commentEditContent.trim())
+                setCommentEditOpen(false)
+                toast.success("Comment updated.")
+              }}
+            >
+              Save changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <AlertDialog open={commentDeleteOpen} onOpenChange={setCommentDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this comment?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes your comment from the local demonstration
+              feed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={() => {
+                if (!selectedComment) return
+                onDeleteComment(selectedComment.id)
+                setCommentDeleteOpen(false)
+                toast.success("Comment deleted.")
+              }}
+            >
+              Delete comment
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={commentReportOpen} onOpenChange={setCommentReportOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Report comment</DialogTitle>
+            <DialogDescription>
+              Choose a reason. This frontend demonstration does not submit a
+              real moderation report.
+            </DialogDescription>
+          </DialogHeader>
+          <Select defaultValue="spam">
+            <SelectTrigger>
+              <SelectValue placeholder="Choose a reason" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="spam">Spam or misleading</SelectItem>
+              <SelectItem value="harassment">Harassment</SelectItem>
+              <SelectItem value="unsafe">Unsafe content</SelectItem>
+              <SelectItem value="other">Something else</SelectItem>
+            </SelectContent>
+          </Select>
+          <Textarea
+            placeholder="Additional details (optional)"
+            aria-label="Report comment details"
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button
+              onClick={() => {
+                setCommentReportOpen(false)
                 toast.success("Thanks. Your report was received in demo mode.")
               }}
             >
@@ -630,6 +867,8 @@ export function NewsfeedPage({
     updatePost,
     deletePost,
     addComment,
+    updateComment,
+    deleteComment,
     toggleComments,
   } = useNewsfeedStore()
   const currentUserName = useSyncExternalStore(
@@ -673,6 +912,7 @@ export function NewsfeedPage({
                 key={post.id}
                 post={post}
                 currentUserName={currentUserName}
+                activeRole={activeRole}
                 onLike={() => toggleLike(post.id)}
                 onSave={() => {
                   toggleSave(post.id)
@@ -688,6 +928,12 @@ export function NewsfeedPage({
                 }}
                 onUpdate={(content) => updatePost(post.id, content)}
                 onComment={(comment) => addComment(post.id, comment)}
+                onUpdateComment={(commentId, content) =>
+                  updateComment(post.id, commentId, content)
+                }
+                onDeleteComment={(commentId) =>
+                  deleteComment(post.id, commentId)
+                }
                 onToggleComments={() => toggleComments(post.id)}
               />
             ))
