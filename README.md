@@ -99,20 +99,11 @@ public/              # Static assets
 
 ## Universal app layout contract
 
-The shared dashboard shell in [`components/dashboard-layout.tsx`](components/dashboard-layout.tsx)
-owns the application chrome and the only page-level `<main>` landmark. The top navigation
-stays separate from the shared max-width wrapper; the sidebar and module content live inside
-that wrapper together.
-
-Every module rendered inside `AppLayout` must follow these rules:
-
-- Do not add another `<main>` element.
-- Use `<section>` for a meaningful module or grouped content, with a visible heading or an accessible label.
-- Use `<article>` for standalone content such as an individual blog/resource detail.
-- Use `<div>` for visual layout, spacing, grids, and internal columns.
-- Add a module-specific `<header>` only when the module has real introductory content. It is not required for Newsfeed or the Resources landing page.
-
-This keeps every role and module aligned to the same sidebar, max-width, and accessibility structure.
+The canonical rules for the shared dashboard shell and every module are in
+[`AGENTS.md`](AGENTS.md). Read that file before adding or changing an authenticated
+module. In short, the shared shell owns the only page-level `<main>`, while the
+top navigation, sidebar, max-width wrapper, and responsive structure are shared by
+all modules.
 
 ## Deployment
 
