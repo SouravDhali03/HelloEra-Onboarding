@@ -1,52 +1,103 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
-import { Input } from "@/components/ui/input"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { ResourceCard } from "./resource-card"
-import { mockResources } from "../data/mock-resources"
+import { getResourceCollection } from "../data/resource-discovery"
+import { mockCurrentUser } from "../data/mock-user"
+import { mockResourceRepository } from "../data/resource-repository"
+import { useMockResourceProgress } from "../data/resource-progress-store"
+import type { ResourceCollection, UserRole } from "../types"
 
-export function ResourceListingPage() {
-  const [query, setQuery] = useState("")
-  const resources = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
-    if (!normalizedQuery) return mockResources
+const collectionLabels: Record<ResourceCollection, string> = {
+  "all-resources": "All resources",
+  "continue-reading": "Continue Reading",
+  "suggested-for-you": "Suggested for You",
+  "popular-this-week": "Popular This Week",
+  "recently-updated": "Recently Updated",
+  "worth-reading-again": "Worth Reading Again",
+}
 
-    return mockResources.filter((resource) =>
-      `${resource.title} ${resource.description} ${resource.subject} ${resource.tags.join(" ")}`
-        .toLowerCase()
-        .includes(normalizedQuery)
-    )
-  }, [query])
+export function ResourceListingPage({
+  collection = "all-resources",
+  role = mockCurrentUser.role,
+}: {
+  collection?: ResourceCollection
+  role?: UserRole
+}) {
+  const searchParams = useSearchParams()
+  const resources = mockResourceRepository.list()
+  const progress = useMockResourceProgress()
+  const requestedCollection = searchParams.get("collection")
+  const selectedCollection = Object.hasOwn(
+    collectionLabels,
+    requestedCollection ?? ""
+  )
+    ? (requestedCollection as ResourceCollection)
+    : collection
+  const collectionResources = getResourceCollection({
+    resources,
+    progress,
+    role,
+    collection: selectedCollection,
+  })
+  const collectionLabel = collectionLabels[selectedCollection]
 
   return (
     <section className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <p className="text-sm font-medium text-primary">Resource library</p>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/resources/">Resources</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{collectionLabel}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          All resources
+          {collectionLabel}
         </h1>
-        <p className="max-w-2xl text-muted-foreground">
-          Browse the complete HelloEra library and open any resource for its
-          full reading experience.
-        </p>
       </header>
-      <Input
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search all resources"
-        aria-label="Search all resources"
-      />
-      {resources.length ? (
+      {collectionResources.length ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {resources.map((resource) => (
-            <ResourceCard key={resource.id} resource={resource} />
+          {collectionResources.map((resource) => (
+            <ResourceCard
+              key={resource.id}
+              resource={resource}
+              progress={progress[resource.id]}
+              showProgress={selectedCollection === "continue-reading"}
+            />
           ))}
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">
-          No resources match your search.
-        </p>
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyTitle>No resources found</EmptyTitle>
+            <EmptyDescription>
+              There are no resources in this collection yet.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       )}
     </section>
   )

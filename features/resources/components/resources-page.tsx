@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -12,43 +11,61 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { ResourceCard } from "./resource-card"
-import { mockResources } from "../data/mock-resources"
-import type { ResourceProgress } from "../types"
+import { mockResourceRepository } from "../data/resource-repository"
+import { getResourceCollection } from "../data/resource-discovery"
+import { mockCurrentUser } from "../data/mock-user"
+import { useMockResourceProgress } from "../data/resource-progress-store"
+import type {
+  Resource,
+  ResourceCollection,
+  ResourceProgress,
+  UserRole,
+} from "../types"
 
-const initialProgress: Record<string, ResourceProgress> = {
-  "interview-preparation": { state: "in_progress", percent: 42 },
-}
+const allResources = mockResourceRepository.list()
 
-export function ResourcesPage() {
+export function ResourcesPage({
+  role = mockCurrentUser.role,
+}: {
+  role?: UserRole
+}) {
   const [category, setCategory] = useState("All")
-  const [progress] = useState(initialProgress)
+  const progress = useMockResourceProgress()
 
   const categories = [
     "All",
-    ...new Set(mockResources.map((resource) => resource.category)),
+    ...new Set(allResources.map((resource) => resource.category)),
   ]
   const filteredResources = useMemo(
     () =>
-      mockResources.filter((resource) => {
-        return category === "All" || resource.category === category
+      allResources.filter((resource) => {
+        const matchesCategory =
+          category === "All" || resource.category === category
+        const isCompleted = progress[resource.id]?.state === "completed"
+
+        return matchesCategory && (category === "All" || !isCompleted)
       }),
-    [category]
+    [category, progress]
   )
 
-  const continueReading = mockResources.filter(
-    (resource) => progress[resource.id]?.state === "in_progress"
-  )
-  const suggested = mockResources
-    .filter((resource) => resource.roleRelevance.includes("student"))
-    .slice(0, 3)
-  const popular = mockResources.slice(1, 4)
-  const recentlyUpdated = mockResources.slice(3, 6)
+  const getCollection = (collection: ResourceCollection) =>
+    getResourceCollection({
+      resources: allResources,
+      progress,
+      role,
+      collection,
+    })
+  const continueReading = getCollection("continue-reading")
+  const suggested = getCollection("suggested-for-you")
+  const popular = getCollection("popular-this-week")
+  const recentlyUpdated = getCollection("recently-updated")
+  const worthReadingAgain = getCollection("worth-reading-again")
   const isFiltering = category !== "All"
 
-  function renderGrid(resources: typeof mockResources) {
+  function renderGrid(resourcesToRender: Resource[]) {
     return (
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {resources.map((resource) => (
+        {resourcesToRender.map((resource) => (
           <ResourceCard
             key={resource.id}
             resource={resource}
@@ -86,19 +103,16 @@ export function ResourcesPage() {
             className="flex flex-col gap-4"
             aria-labelledby="search-results-heading"
           >
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <h2
-                  id="search-results-heading"
-                  className="font-heading text-xl font-semibold"
-                >
-                  Filtered resources
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {filteredResources.length} resources found
-                </p>
-              </div>
-              <Badge variant="outline">{category}</Badge>
+            <div>
+              <h2
+                id="search-results-heading"
+                className="font-heading text-xl font-semibold"
+              >
+                {category} resources
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {filteredResources.length} resources found
+              </p>
             </div>
             {filteredResources.length ? (
               renderGrid(filteredResources)
@@ -121,6 +135,7 @@ export function ResourcesPage() {
                 description="Pick up where you left off."
                 resources={continueReading}
                 progress={progress}
+                collection="continue-reading"
               />
             ) : null}
             <ResourceSection
@@ -128,19 +143,31 @@ export function ResourcesPage() {
               description="A starting point based on your active profile."
               resources={suggested}
               progress={progress}
+              collection="suggested-for-you"
             />
             <ResourceSection
               title="Popular This Week"
               description="Resources HelloEra learners are exploring."
               resources={popular}
               progress={progress}
+              collection="popular-this-week"
             />
             <ResourceSection
               title="Recently Updated"
               description="Fresh material from the HelloEra learning team."
               resources={recentlyUpdated}
               progress={progress}
+              collection="recently-updated"
             />
+            {worthReadingAgain.length ? (
+              <ResourceSection
+                title="Worth Reading Again"
+                description="Revisit resources you have already completed."
+                resources={worthReadingAgain}
+                progress={progress}
+                collection="worth-reading-again"
+              />
+            ) : null}
           </div>
         )}
       </div>
@@ -153,11 +180,13 @@ function ResourceSection({
   description,
   resources,
   progress,
+  collection,
 }: {
   title: string
   description: string
-  resources: typeof mockResources
+  resources: Resource[]
   progress: Record<string, ResourceProgress>
+  collection: ResourceCollection
 }) {
   return (
     <section
@@ -175,7 +204,9 @@ function ResourceSection({
           <p className="text-sm text-muted-foreground">{description}</p>
         </div>
         <Button asChild variant="ghost" size="sm">
-          <Link href="/resources/listing">See all</Link>
+          <Link href={`/resources/listing/?collection=${collection}`}>
+            See all
+          </Link>
         </Button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

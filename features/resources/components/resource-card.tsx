@@ -28,14 +28,14 @@ export function ResourceCard({
   return (
     <Link
       href={`/resources/${resource.id}`}
-      className="block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="block h-full rounded-2xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
       aria-label={`Open ${resource.title}`}
     >
       <Card className="h-full gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md">
         <div className="relative aspect-[1.8/1] overflow-hidden bg-muted">
           <Image
             src={resource.imageUrl}
-            alt=""
+            alt={resource.title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 33vw"
@@ -48,8 +48,12 @@ export function ResourceCard({
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <span>{metadata}</span>
             <span aria-hidden="true">·</span>
-            {showProgress && progress ? (
-              <span>{progress.percent}% complete</span>
+            {progress?.state === "completed" ? (
+              <span className="font-medium text-success">Complete</span>
+            ) : showProgress && progress ? (
+              <span className="font-medium text-primary">
+                {progress.percent}% complete
+              </span>
             ) : (
               <span>Published {publishedDate}</span>
             )}
@@ -62,9 +66,6 @@ export function ResourceCard({
               {resource.description}
             </p>
           </div>
-          {progress?.state === "completed" ? (
-            <p className="text-xs font-medium text-primary">Completed</p>
-          ) : null}
         </CardContent>
       </Card>
     </Link>
